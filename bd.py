@@ -2,15 +2,17 @@ import pymysql
 
 class Conexion:
     def __init__(self):
-        self.conexion = pymysql.connect(
+        try:
+            self.conexion = pymysql.connect(
             host='localhost',
             db='test_db',
             passwd='admin',
             port=3306,
             user='root'
-        )
-        self.cursor = self.conexion.cursor()
-
+            )
+            self.cursor = self.conexion.cursor()
+        except Exception as e:
+            print(f'Ha habido un error: {e}')
     def agregarRegistro(self, datos_registro):
         query = 'INSERT INTO persona (nombre, apellido, edad, pais, direccion, email) VALUES (%s, %s, %s, %s, %s, %s)'
         self.cursor.execute(query, datos_registro)
@@ -36,5 +38,4 @@ class Conexion:
         self.conexion.commit()
 
 conexion = Conexion()
-conexion.mostrarRegistros()
 conexion.conexion.close()
